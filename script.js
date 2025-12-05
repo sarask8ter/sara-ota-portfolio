@@ -417,3 +417,99 @@ function initEasterEgg() {
 }
 
 initEasterEgg();
+
+// Photo Carousel functionality
+function initPhotoCarousel() {
+    const track = document.querySelector('.carousel-track');
+    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const nextBtn = document.querySelector('.next-btn');
+    const prevBtn = document.querySelector('.prev-btn');
+    const indicatorsContainer = document.querySelector('.carousel-indicators');
+    
+    if (!track || slides.length === 0) return;
+    
+    let currentIndex = 0;
+    
+    // Create indicators
+    slides.forEach((_, index) => {
+        const indicator = document.createElement('div');
+        indicator.classList.add('carousel-indicator');
+        if (index === 0) indicator.classList.add('active');
+        indicator.addEventListener('click', () => goToSlide(index));
+        indicatorsContainer.appendChild(indicator);
+    });
+    
+    const indicators = Array.from(document.querySelectorAll('.carousel-indicator'));
+    
+    // Move to specific slide
+    function goToSlide(index) {
+        currentIndex = index;
+        const slideWidth = slides[0].getBoundingClientRect().width;
+        track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+        
+        // Update indicators
+        indicators.forEach((indicator, i) => {
+            indicator.classList.toggle('active', i === currentIndex);
+        });
+    }
+    
+    // Next button
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        goToSlide(currentIndex);
+    });
+    
+    // Previous button
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        goToSlide(currentIndex);
+    });
+    
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    track.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+    });
+    
+    track.addEventListener('touchmove', (e) => {
+        touchEndX = e.touches[0].clientX;
+    });
+    
+    track.addEventListener('touchend', () => {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swipe left - next
+                currentIndex = (currentIndex + 1) % slides.length;
+            } else {
+                // Swipe right - previous
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            }
+            goToSlide(currentIndex);
+        }
+    });
+    
+    // Auto-play (optional - comment out if not wanted)
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        goToSlide(currentIndex);
+    }, 5000); // Change slide every 5 seconds
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            goToSlide(currentIndex);
+        } else if (e.key === 'ArrowRight') {
+            currentIndex = (currentIndex + 1) % slides.length;
+            goToSlide(currentIndex);
+        }
+    });
+}
+
+// Initialize carousel
+document.addEventListener('DOMContentLoaded', initPhotoCarousel);
