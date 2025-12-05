@@ -1046,70 +1046,174 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 4px solid var(--primary-color);
-  box-shadow: var(--shadow-glow);
+  border: 5px solid var(--primary-color);
+  box-shadow: 0 0 30px rgba(221, 160, 221, 0.4),
+              0 0 60px rgba(173, 216, 230, 0.3),
+              0 10px 40px rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-normal);
+  filter: brightness(1.05) contrast(1.05);
+}
+
+.avatar-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(221, 160, 221, 0.6),
+              0 0 80px rgba(173, 216, 230, 0.4),
+              0 15px 50px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent-color);
 }
 
 /* Beyond Code Section */
 .beyond-code {
   padding: var(--section-padding);
-  background: var(--bg-secondary);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--ghost-white) 100%);
 }
 
 .photo-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: 120px;
+  gap: 1.5rem;
   margin-top: 3rem;
 }
 
 .gallery-item {
   position: relative;
-  border-radius: var(--border-radius-lg);
   overflow: hidden;
   background: var(--bg-card);
   box-shadow: var(--shadow-md);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition: all var(--transition-normal);
+  border: 3px solid transparent;
+}
+
+/* Artistic shapes and sizes */
+.gallery-item:nth-child(1) {
+  grid-column: span 5;
+  grid-row: span 3;
+  border-radius: 30px 30px 150px 30px;
+  border-color: var(--primary-color);
+}
+
+.gallery-item:nth-child(2) {
+  grid-column: span 7;
+  grid-row: span 3;
+  border-radius: 30px 150px 30px 30px;
+  border-color: var(--secondary-color);
+}
+
+.gallery-item:nth-child(3) {
+  grid-column: span 6;
+  grid-row: span 4;
+  border-radius: 150px 30px 30px 30px;
+  border-color: var(--accent-color);
+}
+
+.gallery-item:nth-child(4) {
+  grid-column: span 6;
+  grid-row: span 4;
+  border-radius: 30px 30px 30px 150px;
+  border-color: var(--soft-blue);
 }
 
 .gallery-item:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
+  transform: scale(1.02) rotate(1deg);
+  box-shadow: 0 20px 40px rgba(221, 160, 221, 0.3);
+  border-width: 4px;
+  z-index: 10;
 }
 
 .gallery-item img {
   width: 100%;
-  height: 350px;
+  height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform var(--transition-slow);
+  filter: brightness(0.95) contrast(1.05);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.08);
+  filter: brightness(1) contrast(1.1);
 }
 
 .gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 1.5rem;
-  background: var(--bg-card);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  transform: translateY(100%);
+  transition: transform var(--transition-normal);
+}
+
+.gallery-item:hover .gallery-caption {
+  transform: translateY(0);
 }
 
 .gallery-caption h4 {
-  color: var(--primary-color);
+  color: var(--text-light);
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .gallery-caption p {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.875rem;
   line-height: 1.5;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Responsive adjustments for photo gallery */
+@media (max-width: 1024px) {
+  .photo-gallery {
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 150px;
+  }
+  
+  .gallery-item:nth-child(1),
+  .gallery-item:nth-child(2) {
+    grid-column: span 6;
+    grid-row: span 2;
+  }
+  
+  .gallery-item:nth-child(3),
+  .gallery-item:nth-child(4) {
+    grid-column: span 3;
+    grid-row: span 3;
+  }
+}
+
 @media (max-width: 768px) {
   .photo-gallery {
     grid-template-columns: 1fr;
+    grid-auto-rows: 300px;
     gap: 1.5rem;
   }
   
-  .gallery-item img {
-    height: 300px;
+  .gallery-item:nth-child(1),
+  .gallery-item:nth-child(2),
+  .gallery-item:nth-child(3),
+  .gallery-item:nth-child(4) {
+    grid-column: span 1;
+    grid-row: span 1;
+    border-radius: var(--border-radius-lg);
+  }
+  
+  .gallery-caption {
+    transform: translateY(0);
+    position: relative;
+    background: var(--bg-card);
+  }
+  
+  .gallery-caption h4 {
+    color: var(--primary-color);
+    text-shadow: none;
+  }
+  
+  .gallery-caption p {
+    color: var(--text-secondary);
+    text-shadow: none;
   }
 }
